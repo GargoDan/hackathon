@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import json
 
 def test_function():
     print('vse norm')
@@ -7,7 +8,8 @@ def test_function():
 def rolling_window(df_series, window_size=3):
     df_list = []
     for i in range(df_series.shape[0]):
-        window_f = pd.DataFrame(df_series.iloc[i, :].shift(1).rolling(min_periods=1, center=False, window=window_size).mean().iloc[window_size:]).T
+        window_f = pd.DataFrame(df_series.iloc[i, :].shift(1).rolling(min_periods=1, 
+        center=False, window=window_size).mean().iloc[window_size:]).T
         window_f.columns = [str(x) + f'w_{i}' for i, x in enumerate(window_f.columns)]
         df_list.append(window_f)
     df_to_return = pd.concat(df_list, axis=0)
@@ -43,5 +45,19 @@ def clean_data(input_data):
     df = df.merge(conf,on='code').merge(caseF,on='code').merge(covd,on='code').merge(covi,on='code')
     return df
 
+def predict(data):
+    df1 = data[data.iloc[:, 9:19].sum(axis=1) == 107]
+    df1['predict'] = np.zeros(len(df1))
+    #df2 = data[data.iloc[:, 9:19].sum(axis=1) != 0] доделать сюда критерий и валидцаю на бутстреп и тд
+    return df1
+
+def format_output(data):
+    with open('dict.json') as f:
+        d = json.load(f)
+    regions = pd.DataFrame(d.items())
+    regions.columns = ['Region', 'code']
+    output_columns = ['prod_norm_name', 'prod_form_norm_name', 'code', 'prod_pack_1_2',
+       'prod_pack_1_size', 'origin', 'ЖНВЛП', 'Ковид','prod_d_norm_name', 'predict']
+    return regions.merge(data[output_columns],on='code')
 if __name__ == "__main__":
     clean_data('test.csv')
