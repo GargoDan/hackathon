@@ -1,6 +1,9 @@
 import pandas as pd
 import os
 
+def test_function():
+    print('vse norm')
+
 def rolling_window(df_series, window_size=3):
     df_list = []
     for i in range(df_series.shape[0]):
