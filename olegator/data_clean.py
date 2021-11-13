@@ -10,7 +10,7 @@ def rolling_window(df_series, window_size=3):
     df_to_return = pd.concat(df_list, axis=0)
     return df_to_return
 
-def clean_data(input_data, output_data):
+def clean_data(input_data):
     df = pd.read_csv(input_data)
     df.drop(columns=['year_'], inplace=True) # Этот слобец не нужен
     df.drop(columns=['name'], inplace=True) # Этот слобец не нужен
@@ -19,7 +19,8 @@ def clean_data(input_data, output_data):
     df['Ковид'] = df['Ковид'].apply(lambda x: int(x == "Да")) # Создаем числовые признаки
     df['code'] = df['code'].astype(int) # Это целые числа
     df = df.fillna(0) 
-    df = pd.pivot_table(df, index=['prod_norm_name', 'prod_form_norm_name', "code", 'prod_pack_1_2', 'prod_pack_1_size', 'origin', 'ЖНВЛП', 'Ковид', 'prod_d_norm_name'], values='Count_3', columns='month_', aggfunc=max)
+    df = pd.pivot_table(df, index=['prod_norm_name', 'prod_form_norm_name', "code", 'prod_pack_1_2', 'prod_pack_1_size',
+     'origin', 'ЖНВЛП', 'Ковид', 'prod_d_norm_name'], values='Count_3', columns='month_', aggfunc=max)
     df.to_csv('tmp.csv')
     df = pd.read_csv('tmp.csv')
     os.remove('tmp.csv')
@@ -32,7 +33,8 @@ def clean_data(input_data, output_data):
     covd = pd.read_csv('covid_death.csv')
     covd.columns = ['code', '1_covd','2_covd','3_covd','4_covd','5_covd','6_covd','7_covd','8_covd','9_covd','10_covd']
     caseF = pd.read_csv('ovid_Case_Fatality_Ratio.csv')
-    caseF.columns = ['code', '1_caseF','2_caseF','3_caseF','4_caseF','5_caseF','6_caseF','7_caseF','8_caseF','9_caseF','10_caseF']
+    caseF.columns = ['code', '1_caseF','2_caseF','3_caseF','4_caseF','5_caseF','6_caseF',
+    '7_caseF','8_caseF','9_caseF','10_caseF']
     conf = pd.read_csv('covid_confirmed.csv')
     conf.columns = ['code', '1_conf','2_conf','3_conf','4_conf','5_conf','6_conf','7_conf','8_conf','9_conf','10_conf']
     df = df.merge(conf,on='code').merge(caseF,on='code').merge(covd,on='code').merge(covi,on='code')
