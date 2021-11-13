@@ -1,7 +1,9 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask,flash,request,redirect,send_file,render_template
+import sys
 
+sys.path.append('/Users/user/hackathon/olegator')
 import data_clean as dc
 
 dc.test_function()
