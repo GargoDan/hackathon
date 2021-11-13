@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+import numpy as np
 
 def test_function():
     print('vse norm')
