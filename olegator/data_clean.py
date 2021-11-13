@@ -40,4 +40,5 @@ def clean_data(input_data):
     df = df.merge(conf,on='code').merge(caseF,on='code').merge(covd,on='code').merge(covi,on='code')
     return df
 
-clean_data('test.csv')
+if __name__ == "__main__":
+    clean_data('test.csv')
