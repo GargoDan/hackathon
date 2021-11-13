@@ -45,12 +45,6 @@ def clean_data(input_data):
     df = df.merge(conf,on='code').merge(caseF,on='code').merge(covd,on='code').merge(covi,on='code')
     return df
 
-def predict(data):
-    df1 = data[data.iloc[:, 9:19].sum(axis=1) == 107]
-    df1['predict'] = np.zeros(len(df1))
-    #df2 = data[data.iloc[:, 9:19].sum(axis=1) != 0] доделать сюда критерий и валидцаю на бутстреп и тд
-    return df1
-
 def format_output(data):
     with open('dict.json') as f:
         d = json.load(f)
