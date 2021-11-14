@@ -4,8 +4,6 @@ import json
 import numpy as np
 from predict import predict
 
-def test_function():
-    print('vse norm')
 
 def rolling_window(df_series, window_size=3):
     df_list = []
@@ -59,4 +57,4 @@ def format_output(data, path):
 def backend(input_data):
     return format_output(predict(clean_data(input_data)), input_data)
 if __name__ == "__main__":
-    clean_data('test.csv')
+    clean_data('test.csv').to_csv('test_predict.csv', index=False)
