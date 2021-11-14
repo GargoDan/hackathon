@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import json
 import numpy as np
+from predict import predict
 
 def test_function():
     print('vse norm')
@@ -46,13 +47,16 @@ def clean_data(input_data):
     df = df.merge(conf,on='code').merge(caseF,on='code').merge(covd,on='code').merge(covi,on='code')
     return df
 
-def format_output(data):
+def format_output(data, path):
     with open('dict.json') as f:
         d = json.load(f)
     regions = pd.DataFrame(d.items())
     regions.columns = ['Region', 'code']
     output_columns = ['prod_norm_name', 'prod_form_norm_name', 'code', 'prod_pack_1_2',
        'prod_pack_1_size', 'origin', 'ЖНВЛП', 'Ковид','prod_d_norm_name', 'predict']
-    return regions.merge(data[output_columns],on='code')
+    regions.merge(data[output_columns],on='code').to_csv(path,index=False)
+
+def backend(input_data):
+    return format_output(predict(clean_data(input_data)), input_data)
 if __name__ == "__main__":
     clean_data('test.csv')
