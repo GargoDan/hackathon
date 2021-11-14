@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.stats import randint, norm
+from catboost import CatBoostRegressor
 
 def make_bootstrap(X):
     Y = randint.rvs(low = 0, high = len(X),  size = len(X))
@@ -97,7 +98,7 @@ def predict(data):
     test_X['prod_norm_name'] = test_X['prod_norm_name'].astype(int)
     from_file = CatBoostRegressor()
     from_file.load_model('/Users/user/hackathon/olegator/model.cbm')
-    df_catboost['predict'] 
+    df_catboost['predict'] =  np.exp(from_file.predict(test_X)) - 1
 
 
     df_stat = df2[df2['const'] != 1]
