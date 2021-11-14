@@ -1,0 +1,31 @@
+<!doctype html>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload_style.css') }}">
+    <title>Сайт предсказания спроса на лекарственные препараты в России</title>
+<body>
+    <div class='topbar'>
+      <span class='barspan'>Загрузите данные.</span>
+    </div>
+    <div class='midbar'>
+      <span class='barspan'>Обаботка может занять некоторое время.</span>
+    </div>
+    <div class='botbar'>
+      <span class='barspan'>После обработки Вы автоматически перейдете на другой сайт, на котором будет возможность скачать предсказание.</span>
+    </div>
+    
+    <form action="" method=post enctype=multipart/form-data>
+      <p align='center'><input type=file name=file id="actual-btn" accept="text/csv" hidden/>
+        <label for="actual-btn">Выберите файл</label> 
+        <span id="file-chosen">Нет выбранного файла</span>
+         <input type=submit value=Отправить>
+    </form>
+</body>
+
+<script>
+  const actualBtn = document.getElementById('actual-btn');
+
+  const fileChosen = document.getElementById('file-chosen');
+
+  actualBtn.addEventListener('change', function(){
+    fileChosen.textContent = this.files[0].name
+  })
+</script>

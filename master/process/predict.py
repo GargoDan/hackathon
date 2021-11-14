@@ -8,11 +8,43 @@ def make_bootstrap(X):
     
     return [X[i] for i in Y]
 
+#для среднего бутстреп
+def mean_bt(X):
+    B = 500
+    distr = []
+    for i in range(B):
+        distr.append(np.mean(make_bootstrap(X)))
+
+    D = np.var(distr)
+    se = D**0.5
+
+    alpha = 0.05
+    z = norm.ppf(1-alpha/2)
+
+    #дов интервал 0,95
+    return np.mean(X) + z*se
+
+#бутстреп для 0,95 квантиля
+def quantile_bt(X):
+    B = 500
+    distr = []
+    for i in range(B):
+        distr.append(np.quantile(make_bootstrap(X), 0.95))
+
+    D = np.var(distr)
+    se = D**0.5
+
+    alpha = 0.05
+    z = norm.ppf(1-alpha/2)
+
+    #дов интервал
+    return np.quantile(X, 0.95) + z*se
+
 def predict(data):
     df1 = data[data.iloc[:, 9:19].sum(axis=1) == 0]
     df2 = data[data.iloc[:, 9:19].sum(axis=1) != 0]
     df1 ['predict'] = np.zeros(len(df1))
-    ind = pd.read_csv('/Users/user/hackathon/olegator/ind.csv')
+    ind = pd.read_csv('/home/ivan/Documents/hakathon peter/hackathon/vanya/process/ind.csv')
     df2 = df2.merge(ind,on=['prod_norm_name', 'prod_form_norm_name', 'code', 'prod_pack_1_2',
        'prod_pack_1_size', 'origin', 'prod_d_norm_name'],how='left')
 
@@ -65,8 +97,8 @@ def predict(data):
     test_X['code'] = test_X['code'].astype(int)
     test_X['prod_norm_name'] = test_X['prod_norm_name'].astype(int)
     from_file = CatBoostRegressor()
-    from_file.load_model('/Users/user/hackathon/olegator/model.cbm')
-    df_catboost['predict'] =  np.exp(from_file.predict(test_X)) - 1
+    from_file.load_model('/home/ivan/Documents/hakathon peter/hackathon/vanya/process/model.cbm')
+    df_catboost['predict'] = np.exp(from_file.predict(test_X)) - 1
 
 
     df_stat = df2[df2['const'] != 1]
@@ -79,5 +111,5 @@ def predict(data):
     return pd.concat([df1,df_catboost,df_stat_jn,df_stat_not_jn], axis=0).drop('const',axis=1)
 
 if __name__ == "__main__":
-    df = pd.read_csv('test_predict.csv')
+    df = pd.read_csv('/home/ivan/Documents/hakathon peter/hackathon/olegator/test_predict.csv')
     print(predict(df)['predict'])
