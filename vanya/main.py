@@ -1,21 +1,18 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask,flash,request,redirect,send_file,render_template
-import sys
+#from flask import json
+from time import sleep
 
-sys.path.append('/Users/user/hackathon/olegator')
-import data_clean as dc
 
-dc.test_function()
-
-UPLOAD_FOLDER = '/home/ivan/files/pyfiles/hack_serv/uploads/'
+UPLOAD_FOLDER = '/home/ivan/files/pyfiles/hack_serv/data/'
 
 #app = Flask(__name__)
 app = Flask(__name__, template_folder='templates')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Upload API
-@app.route('/uploadfile', methods=['GET', 'POST'])
+@app.route('/medicine', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -30,23 +27,33 @@ def upload_file():
             return redirect(request.url)
         else:
             filename = secure_filename(file.filename)
-            #print(file)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("saved file successfully")
-      #send file name as parameter to downlad
-            return redirect('/downloadfile/'+ filename)
+            sleep(5)
+            return redirect('/download')
 
     return render_template('upload_file.html')
 
-# Download API
-@app.route("/downloadfile/<filename>", methods = ['GET'])
-def download_file(filename):
-    return render_template('download.html',value=filename)
 
-@app.route('/return-files/<filename>')
-def return_files_tut(filename):
-    file_path = UPLOAD_FOLDER + filename
+# Download API
+@app.route("/download", methods = ['GET'])
+def download_file():
+    return render_template('download.html')
+
+# @app.route('/dict')
+# def summary():
+#     file_path = UPLOAD_FOLDER + "dict.json"
+#     return send_file(file_path, as_attachment=True, attachment_filename='')
+
+@app.route('/return-files')
+def return_files_tut():
+    file_path = UPLOAD_FOLDER + "predictions.csv"
     return send_file(file_path, as_attachment=True, attachment_filename='')
+
+# @app.route('/return-files/<region>')
+# def return_files_tut(region):
+#     file_path = UPLOAD_FOLDER + "predictions.csv"
+#     return send_file(file_path, as_attachment=True, attachment_filename='')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')

@@ -1,13 +1,24 @@
 <!doctype html>
-<<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">>
-    <title>Upload new File</title>
-    <h1 align='center'>Upload new File</h1>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload_style.css') }}">
+    <title>Сайт предсказания спроса на лекарственные препараты в России</title>
+<body>
+    <div class='topbar'>
+      <span class='barspan'>Загрузите данные.</span>
+    </div>
+    <div class='midbar'>
+      <span class='barspan'>Обаботка может занять некоторое время.</span>
+    </div>
+    <div class='botbar'>
+      <span class='barspan'>После обработки Вы автоматически перейдете на другой сайт, на котором будет возможность скачать предсказание.</span>
+    </div>
+    
     <form action="" method=post enctype=multipart/form-data>
-      <p align='center'><input type=file name=file accept="text/csv" id="actual-btn" hidden/>
-        <label for="actual-btn" width=600px>Выберите файл</label> 
-        <span id="file-chosen">No file chosen</span>
-         <input type=submit value=Загрузить>
+      <p align='center'><input type=file name=file id="actual-btn" accept="text/csv" hidden/>
+        <label for="actual-btn">Выберите файл</label> 
+        <span id="file-chosen">Нет выбранного файла</span>
+         <input type=submit value=Отправить>
     </form>
+</body>
 
 <script>
   const actualBtn = document.getElementById('actual-btn');
